@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WordModule } from './video/word.module';
+import { WordController } from './video/word.controller';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { WordModule } from './video/word.module';
       logging: ['error'],
     }),
   ],
-  controllers: [AppController],
+  controllers: [WordController, AppController],
   providers: [AppService],
 })
 export class AppModule { }

@@ -6,22 +6,8 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-export interface WordErrors {
-  downloadError?: any;
-  deffenderError?: any;
-}
-
 export interface WordMeta {
-  errors?: WordErrors;
   uploadError?: any;
-}
-
-export enum BannMessage {
-  ToMuchHuman = 'to many human actors',
-  OffTopic = 'not about the keyword',
-  IdleFfmped = 'ffmpeg stays idle on Word',
-  Garbage = 'garbage Word',
-  NoMesg = 'no message',
 }
 
 @Entity()
