@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WordModule } from './video/word.module';
-import { WordController } from './video/word.controller';
+import { WordModule } from './word/word.module';
+import { WordController } from './word/word.controller';
 
 @Module({
   imports: [
