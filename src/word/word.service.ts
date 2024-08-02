@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Word } from './entities/word.entity';
+import { Word } from '../users/entities/word.entity';
 import { CrudService } from '@nestjs-library/crud';
 import { Like, Repository } from 'typeorm';
 

@@ -1,8 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjs-library/crud';
-
 import { WordService } from './word.service';
-import { Word } from './entities/word.entity';
+import { Word } from '../users/entities/word.entity';
 import { GetItemsDto } from './word.dtos';
 
 @Crud({ entity: Word })

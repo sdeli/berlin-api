@@ -4,10 +4,15 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WordModule } from './word/word.module';
 import { WordController } from './word/word.controller';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     WordModule,
+    ConfigModule.forRoot({
+      isGlobal: true, // Make the configuration global
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -22,6 +27,7 @@ import { WordController } from './word/word.controller';
       subscribers: [],
       logging: ['error'],
     }),
+    AuthModule,
   ],
   controllers: [WordController, AppController],
   providers: [AppService],
