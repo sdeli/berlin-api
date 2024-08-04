@@ -1,18 +1,40 @@
 // src/auth/auth.controller.ts
-import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Body,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './local-auth.guard';
-import { RegisterDto } from './dto/register.dto';
-import { CustomRequest } from 'src/libs/types';
+import { LoggedInUserDto, LoginDto, TokensDto, UserDataDto } from './dto';
+import { RegisterDataAuthGuard } from './register-data-auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) { }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(RegisterDataAuthGuard)
   @Post('login')
-  async login(@Request() req: CustomRequest) {
-    return this.authService.login(req.user);
+  async login(@Body() loginDto: LoginDto) {
+    const user = await this.authService.validateUser(
+      loginDto.username,
+      loginDto.password,
+    );
+
+    let tokens: TokensDto;
+    if (user) {
+      tokens = await this.authService.login(user);
+    } else {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const loggedInUser: LoggedInUserDto = {
+      user,
+      tokens,
+    };
+
+    return loggedInUser;
   }
 
   @Post('refresh')
@@ -20,9 +42,19 @@ export class AuthController {
     return this.authService.refreshToken(refreshToken);
   }
 
+  @UseGuards(RegisterDataAuthGuard)
   @Post('register')
-  async register(@Body() body: RegisterDto) {
-    const { username, password } = body;
-    return this.authService.register(username, password);
+  async register(@Body() loginDto: LoginDto): Promise<UserDataDto> {
+    const user = await this.authService.validateUser(
+      loginDto.username,
+      loginDto.password,
+    );
+
+    if (!user) {
+      const { username, password } = loginDto;
+      return await this.authService.register(username, password);
+    }
+
+    return;
   }
 }
