@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Word } from '../users/entities/word.entity';
+import { Word } from './entities/word.entity';
 import { CrudService } from '@nestjs-library/crud';
 import { Like, Repository } from 'typeorm';
 
@@ -17,7 +17,7 @@ export class WordService extends CrudService<Word> {
     if (filter) {
       return this.repo.find({
         where: {
-          title: Like(`%${filter}%`), // Use LIKE operator here
+          text: Like(`%${filter}%`), // Use LIKE operator here
         },
       });
     }

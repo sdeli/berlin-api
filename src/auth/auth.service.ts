@@ -1,9 +1,9 @@
+import { UsersService } from './../users/users.service';
 // src/auth/auth.service.ts
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from 'src/users/users.service';
 import { LoginDto, UserDataDto } from './dto';
 
 @Injectable()
