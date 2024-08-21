@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Word } from './entities/word.entity';
 import { CrudService } from '@nestjs-library/crud';
 import { Like, Repository } from 'typeorm';
+import { GetItemsDto } from './word.dtos';
 
 @Injectable()
 export class WordService extends CrudService<Word> {
@@ -13,14 +14,22 @@ export class WordService extends CrudService<Word> {
     super(repo);
   }
 
-  async findAll(filter?: string): Promise<Word[]> {
+  async findAll(filter?: GetItemsDto): Promise<Word[]> {
+    const queryOptions: any = {
+      relations: ['senses', 'senses.lines'], // Ensure this matches the property name
+    };
+
     if (filter) {
-      return this.repo.find({
-        where: {
-          text: Like(`%${filter}%`), // Use LIKE operator here
-        },
-      });
+      queryOptions.where = {
+        text: Like(`%${filter.text}%`),
+      };
+      if (filter.limit) {
+        queryOptions.take = filter.limit;
+      }
+    } else {
+      queryOptions.take = 20;
     }
-    return this.repo.find();
+
+    return this.repo.find(queryOptions);
   }
 }

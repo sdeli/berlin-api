@@ -6,28 +6,22 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
-import { SenseLine } from './sense-pair.entity';
+import { SenseLine } from './sense-line.entity';
 import { Word } from './word.entity';
-
-export interface WordMeta {
-  uploadError?: any;
-}
+import { LineValue } from 'src/libs/types';
 
 @Entity()
 export class Sense {
   @PrimaryGeneratedColumn('uuid')
   ID: string;
 
-  @Column('text')
-  html: string;
+  @Column('jsonb')
+  line: LineValue;
 
-  @Column('varchar')
-  text: string;
-
-  @OneToMany(() => SenseLine, senseLine => senseLine.sense)
+  @OneToMany(() => SenseLine, (senseLine) => senseLine.sense)
   lines: SenseLine[];
 
-  @ManyToOne(() => Word, word => word.senses)
+  @ManyToOne(() => Word, (word) => word.senses, { nullable: true })
   word: Word;
 
   @CreateDateColumn()

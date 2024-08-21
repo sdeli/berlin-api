@@ -2,16 +2,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  OneToMany,
   ManyToOne,
+  CreateDateColumn,
 } from 'typeorm';
 import { Sense } from './sense.entity';
-
-interface LineValue {
-  html: string;
-  text: string;
-}
+import { LineValue } from 'src/libs/types';
 
 @Entity()
 export class SenseLine {
@@ -24,7 +19,7 @@ export class SenseLine {
   @Column('jsonb')
   target: LineValue;
 
-  @ManyToOne(() => Sense, sense => sense.lines)
+  @ManyToOne(() => Sense, (sense) => sense.lines)
   sense: Sense;
 
   @CreateDateColumn()

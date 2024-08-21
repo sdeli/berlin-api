@@ -1,7 +1,11 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 export class GetItemsDto {
   @IsString()
   @IsOptional() // Make the query parameter optional
-  readonly filter?: string;
+  readonly text?: string;
+
+  @IsNumber()
+  @IsOptional() // Make the query parameter optional
+  readonly limit?: number;
 }

@@ -11,7 +11,16 @@ export class WordController implements CrudController<Word> {
 
   @Get()
   async findAll(@Query() query: GetItemsDto): Promise<Word[]> {
-    const word = await this.crudService.findAll(query.filter);
-    return word;
+    console.log('query');
+    console.log(query);
+    const noQuery =
+      Object.keys(query).length === 0 && query.constructor === Object;
+    console.log('noQuery');
+    console.log(noQuery);
+    if (noQuery) {
+      return await this.crudService.findAll();
+    }
+
+    return await this.crudService.findAll(query);
   }
 }

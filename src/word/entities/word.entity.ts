@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  ManyToOne,
   OneToMany,
 } from 'typeorm';
 import { Sense } from './sense.entity';
@@ -30,8 +29,8 @@ export class Word {
   @Column({ nullable: false, type: 'jsonb', default: {} })
   meta: WordMeta;
 
-  @OneToMany(() => Sense, sense => sense)
-  senses: Sense;
+  @OneToMany(() => Sense, (sense) => sense.word, { nullable: true })
+  senses: Sense[];
 
   @CreateDateColumn()
   updatedAt: Date;
