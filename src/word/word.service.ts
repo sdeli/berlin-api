@@ -14,15 +14,21 @@ export class WordService extends CrudService<Word> {
     super(repo);
   }
 
-  async findAll(filter?: GetItemsDto): Promise<Word[]> {
+  async find(filter?: GetItemsDto): Promise<Word[]> {
     const queryOptions: any = {
       relations: ['senses', 'senses.lines'], // Ensure this matches the property name
     };
-
     if (filter) {
-      queryOptions.where = {
-        text: Like(`%${filter.text}%`),
-      };
+      const needsExactMatch = filter.limit === 1;
+      if (needsExactMatch) {
+        queryOptions.where = {
+          text: filter.text,
+        };
+      } else {
+        queryOptions.where = {
+          text: Like(`%${filter.text}%`),
+        };
+      }
       if (filter.limit) {
         queryOptions.take = filter.limit;
       }
