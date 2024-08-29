@@ -7,13 +7,8 @@ import {
   OneToOne,
   ManyToMany,
 } from 'typeorm';
-import { Sense } from './sense.entity';
+import { SenseLine } from '../../word/entities/sense-line.entity';
 import { User } from 'src/users/entities/user.entity';
-import { SenseLine } from './sense-line.entity';
-
-export interface WordMeta {
-  uploadError?: any;
-}
 
 @Entity()
 export class SenseList {
@@ -23,10 +18,13 @@ export class SenseList {
   @Column({ type: 'varchar', nullable: false })
   title: string;
 
-  @ManyToMany(() => SenseLine, (senseLine) => senseLine.senseLists)
+  @ManyToMany(() => SenseLine, (senseLine) => senseLine.senseLists, {
+    cascade: true,
+  })
+  @JoinColumn()
   senseLines: SenseLine[];
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { cascade: true })
   @JoinColumn()
   belongsTo: User;
 

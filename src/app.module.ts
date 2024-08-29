@@ -6,10 +6,12 @@ import { WordModule } from './word/word.module';
 import { WordController } from './word/word.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { SenseListModule } from './sense-list/sense-list.module';
 
 @Module({
   imports: [
     WordModule,
+    SenseListModule,
     ConfigModule.forRoot({
       isGlobal: true, // Make the configuration global
     }),

@@ -1,3 +1,8 @@
+import { PartialType } from '@nestjs/mapped-types';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { User } from 'src/users/entities/user.entity';
+import { SenseLine } from 'src/word/entities/sense-line.entity';
+
 // src/auth/dto/register.dto.ts
 export interface RegisterDto {
   username: string;
@@ -28,3 +33,17 @@ export interface LoggedInUserDto {
   user: UserDataDto;
   tokens: TokensDto;
 }
+
+export class CreateSenseListDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsOptional()
+  senseLines?: SenseLine[];
+
+  @IsOptional()
+  belongsTo?: User;
+}
+
+export class UpdateSenseListDto extends PartialType(CreateSenseListDto) { }

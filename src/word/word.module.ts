@@ -5,7 +5,7 @@ import { WordService } from './word.service';
 import { Module } from '@nestjs/common';
 import { Sense } from './entities/sense.entity';
 import { SenseLine } from './entities/sense-line.entity';
-import { SenseList } from './entities/sense-list.entity';
+import { SenseList } from '../sense-list/entities/sense-list.entity';
 
 @Module({
   imports: [

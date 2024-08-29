@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Sense } from './sense.entity';
 import { LineValue } from 'src/libs/types';
-import { SenseList } from './sense-list.entity';
+import { SenseList } from '../../sense-list/entities/sense-list.entity';
 
 @Entity()
 export class SenseLine {
@@ -25,7 +25,7 @@ export class SenseLine {
   sense: Sense;
 
   @ManyToMany(() => SenseList, (senseList) => senseList.senseLines)
-  senseLists: Sense;
+  senseLists: SenseList[];
 
   @CreateDateColumn()
   updatedAt: Date;
