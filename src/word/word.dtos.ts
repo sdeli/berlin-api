@@ -9,3 +9,10 @@ export class GetItemsDto {
   @IsOptional() // Make the query parameter optional
   readonly limit?: number;
 }
+
+export class PostSenseListDto {
+  @IsString()
+  title: string;
+  @IsString()
+  userid: string;
+}

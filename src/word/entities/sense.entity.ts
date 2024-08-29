@@ -5,10 +5,13 @@ import {
   OneToMany,
   ManyToOne,
   CreateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { SenseLine } from './sense-line.entity';
 import { Word } from './word.entity';
 import { LineValue } from 'src/libs/types';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Sense {
@@ -18,7 +21,7 @@ export class Sense {
   @Column('jsonb')
   line: LineValue;
 
-  @OneToMany(() => SenseLine, (senseLine) => senseLine.sense)
+  @OneToMany(() => SenseLine, (senseLine) => senseLine.senseLists)
   lines: SenseLine[];
 
   @ManyToOne(() => Word, (word) => word.senses, { nullable: true })

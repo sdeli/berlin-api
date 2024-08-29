@@ -4,9 +4,11 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 import { Sense } from './sense.entity';
 import { LineValue } from 'src/libs/types';
+import { SenseList } from './sense-list.entity';
 
 @Entity()
 export class SenseLine {
@@ -21,6 +23,9 @@ export class SenseLine {
 
   @ManyToOne(() => Sense, (sense) => sense.lines)
   sense: Sense;
+
+  @ManyToMany(() => SenseList, (senseList) => senseList.senseLines)
+  senseLists: Sense;
 
   @CreateDateColumn()
   updatedAt: Date;

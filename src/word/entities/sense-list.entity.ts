@@ -3,37 +3,28 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  OneToMany,
   JoinColumn,
   OneToOne,
+  ManyToMany,
 } from 'typeorm';
 import { Sense } from './sense.entity';
-import { WordSources } from 'src/libs/types';
 import { User } from 'src/users/entities/user.entity';
+import { SenseLine } from './sense-line.entity';
 
 export interface WordMeta {
   uploadError?: any;
 }
 
 @Entity()
-export class Word {
+export class SenseList {
   @PrimaryGeneratedColumn('uuid')
   ID: string;
 
-  @Column('enum', { enum: WordSources })
-  source: WordSources;
-
-  @Column('varchar', { unique: true })
-  originalUrl: string;
-
   @Column({ type: 'varchar', nullable: false })
-  text: string;
+  title: string;
 
-  @Column({ nullable: false, type: 'jsonb', default: {} })
-  meta: WordMeta;
-
-  @OneToMany(() => Sense, (sense) => sense.word, { nullable: true })
-  senses: Sense[];
+  @ManyToMany(() => SenseLine, (senseLine) => senseLine.senseLists)
+  senseLines: SenseLine[];
 
   @OneToOne(() => User)
   @JoinColumn()
