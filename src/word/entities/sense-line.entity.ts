@@ -5,6 +5,8 @@ import {
   ManyToOne,
   CreateDateColumn,
   ManyToMany,
+  JoinColumn,
+  JoinTable,
 } from 'typeorm';
 import { Sense } from './sense.entity';
 import { LineValue } from 'src/libs/types';
@@ -22,9 +24,13 @@ export class SenseLine {
   target: LineValue;
 
   @ManyToOne(() => Sense, (sense) => sense.lines)
+  @JoinColumn()
   sense: Sense;
 
-  @ManyToMany(() => SenseList, (senseList) => senseList.senseLines)
+  @ManyToMany(() => SenseList, (senseList) => senseList.senseLines, {
+    nullable: true,
+  })
+  @JoinTable()
   senseLists: SenseList[];
 
   @CreateDateColumn()

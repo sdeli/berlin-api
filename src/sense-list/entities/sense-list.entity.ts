@@ -4,8 +4,8 @@ import {
   Column,
   CreateDateColumn,
   JoinColumn,
-  OneToOne,
   ManyToMany,
+  ManyToOne,
 } from 'typeorm';
 import { SenseLine } from '../../word/entities/sense-line.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -20,11 +20,12 @@ export class SenseList {
 
   @ManyToMany(() => SenseLine, (senseLine) => senseLine.senseLists, {
     cascade: true,
+    nullable: true,
   })
   @JoinColumn()
   senseLines: SenseLine[];
 
-  @OneToOne(() => User, { cascade: true })
+  @ManyToOne(() => User, { cascade: true })
   @JoinColumn()
   belongsTo: User;
 

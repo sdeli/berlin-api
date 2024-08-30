@@ -42,8 +42,8 @@ export class CreateSenseListDto {
   @IsOptional()
   senseLines?: SenseLine[];
 
-  @IsOptional()
-  belongsTo?: User;
+  @IsString()
+  userId: string;
 }
 
 export class UpdateSenseListDto extends PartialType(CreateSenseListDto) { }

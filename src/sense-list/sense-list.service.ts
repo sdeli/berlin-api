@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class SenseListService extends TypeOrmCrudService<SenseList> {
-  constructor(@InjectRepository(SenseList) repo: Repository<SenseList>) {
+  constructor(@InjectRepository(SenseList) public repo: Repository<SenseList>) {
     super(repo);
   }
 }
