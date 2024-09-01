@@ -5,13 +5,10 @@ import {
   OneToMany,
   ManyToOne,
   CreateDateColumn,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
 import { SenseLine } from './sense-line.entity';
 import { Word } from './word.entity';
 import { LineValue } from 'src/libs/types';
-import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Sense {

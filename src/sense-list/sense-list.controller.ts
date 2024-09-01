@@ -2,7 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
+  Get,
   InternalServerErrorException,
+  Param,
   Post,
 } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
@@ -14,6 +17,13 @@ import { UsersService } from 'src/users/users.service';
 @Crud({
   model: {
     type: SenseList,
+  },
+  params: {
+    id: {
+      field: 'ID', // Make sure this matches the entity field name
+      type: 'uuid', // Ensure this matches the expected type
+      primary: true,
+    },
   },
   query: {
     join: {
@@ -63,5 +73,20 @@ export class SenseListController implements CrudController<SenseList> {
         'An unexpected error occurred while saving user',
       );
     }
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<void> {
+    return this.service.deleteOneById(id);
+  }
+
+  @Get('by-user')
+  async getOnByUserId(@Param('userId') userId: string): Promise<SenseList[]> {
+    const res = await this.service.find({
+      where: {
+        belongsTo: { id: userId },
+      },
+    });
+    return res;
   }
 }
