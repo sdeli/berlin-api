@@ -6,6 +6,7 @@ import { Module } from '@nestjs/common';
 import { Sense } from './entities/sense.entity';
 import { SenseLine } from './entities/sense-line.entity';
 import { SenseList } from '../sense-list/entities/sense-list.entity';
+import { SenseLineService } from './sense-line.service';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { SenseList } from '../sense-list/entities/sense-list.entity';
     TypeOrmModule.forFeature([Word, Sense, SenseLine, SenseList]),
   ],
   controllers: [WordController],
-  providers: [WordService],
-  exports: [WordService],
+  providers: [WordService, SenseLineService],
+  exports: [WordService, SenseLineService],
 })
 export class WordModule { }

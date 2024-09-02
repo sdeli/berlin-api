@@ -13,6 +13,8 @@ import { SenseList } from './entities/sense-list.entity';
 import { SenseListService } from './sense-list.service';
 import { CreateSenseListDto } from 'src/auth/dto';
 import { UsersService } from 'src/users/users.service';
+import { AddSenseToWordlistsDto } from './dto';
+import { SenseLineService } from 'src/word/sense-line.service';
 
 @Crud({
   model: {
@@ -41,6 +43,7 @@ export class SenseListController implements CrudController<SenseList> {
   constructor(
     public service: SenseListService,
     private usersService: UsersService,
+    private senseLineService: SenseLineService,
   ) { }
 
   @Post()
@@ -86,7 +89,42 @@ export class SenseListController implements CrudController<SenseList> {
       where: {
         belongsTo: { id: userId },
       },
+      relations: ['senseLines'],
     });
     return res;
+  }
+
+  @Post('add-sense')
+  async addSenseToWordlists(
+    @Body() dto: AddSenseToWordlistsDto,
+  ): Promise<SenseList> {
+    const list = await this.service.findOne({
+      where: {
+        ID: dto.listId,
+      },
+      relations: ['senseLines'],
+    });
+    if (!list) {
+      throw new BadRequestException('invalid dto.listId:' + dto.listId);
+    }
+
+    const line = await this.senseLineService.findOne({
+      where: {
+        ID: dto.lineId,
+      },
+    });
+
+    if (!line) {
+      throw new BadRequestException('invalid dto.lineId:' + dto.lineId);
+    }
+    if (!list.senseLines) list.senseLines = [];
+    const duplicateSense = await list.senseLines.find(
+      (sense) => sense.ID === line.ID,
+    );
+    if (duplicateSense) return list;
+
+    list.senseLines = [...list.senseLines, line];
+    const updatedList = await this.service.repo.save(list);
+    return updatedList;
   }
 }
