@@ -15,8 +15,10 @@ import { SenseList } from './entities/sense-list.entity';
 import { SenseListService } from './sense-list.service';
 import { CreateSenseListDto, SenseListDto } from 'src/auth/dto';
 import { UsersService } from 'src/users/users.service';
-import { AddSenseToWordlistsDto } from './dto';
+import { AddSenseToWordlistsDto, AddWordToSearchHistoryDto } from './dto';
 import { SenseLineService } from 'src/word/sense-line.service';
+import { WordService } from 'src/word/word.service';
+import { SenseLine } from 'src/word/entities/sense-line.entity';
 
 @Crud({
   model: {
@@ -46,6 +48,8 @@ export class SenseListController implements CrudController<SenseList> {
     public service: SenseListService,
     private usersService: UsersService,
     private senseLineService: SenseLineService,
+    private wordService: WordService,
+    private senseListService: SenseListService,
   ) { }
 
   @Post()
@@ -152,6 +156,42 @@ export class SenseListController implements CrudController<SenseList> {
     list.senseLines = [...list.senseLines, line];
     const updatedList = await this.service.repo.save(list);
     return updatedList;
+  }
+
+  @Post('history')
+  async addWordToSearchHistory(
+    @Body() dto: AddWordToSearchHistoryDto,
+  ): Promise<void> {
+    console.log('addWordToSearchHistory');
+    const { userId, wordId } = dto;
+    const user = await this.usersService.repo.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) throw new BadRequestException();
+
+    const historyList = await this.senseListService.repo.findOne({
+      where: { belongsTo: user, title: 'Search History' },
+      relations: ['senseLines'],
+    });
+    if (!historyList) throw new BadRequestException();
+    const word = await this.wordService.repo.findOne({
+      where: {
+        ID: wordId,
+      },
+      relations: ['senses', 'senses.lines'],
+    });
+    if (!word) throw new BadRequestException();
+    let defaultLine: SenseLine;
+    try {
+      defaultLine = word.senses[0].lines[0];
+    } catch (error) {
+      throw new BadRequestException();
+    }
+
+    if (!historyList.senseLines) historyList.senseLines = [];
+    historyList.senseLines = [defaultLine, ...historyList.senseLines];
+    await this.senseListService.repo.save(historyList);
   }
 
   @Post('remove-sense')

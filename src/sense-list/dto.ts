@@ -5,3 +5,10 @@ export class AddSenseToWordlistsDto {
   @IsString()
   listId: string;
 }
+
+export class AddWordToSearchHistoryDto {
+  @IsString()
+  wordId: string;
+  @IsString()
+  userId: string;
+}
