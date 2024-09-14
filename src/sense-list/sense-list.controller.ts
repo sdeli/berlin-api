@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { SenseList } from './entities/sense-list.entity';
@@ -107,7 +108,9 @@ export class SenseListController implements CrudController<SenseList> {
   }
 
   @Get('by-user')
-  async getOnByUserId(@Param('userId') userId: string): Promise<SenseList[]> {
+  async getOnByUserId(@Query('userId') userId: string): Promise<SenseList[]> {
+    if (!userId) throw new BadRequestException();
+
     const res = await this.service.find({
       where: {
         belongsTo: { id: userId },
