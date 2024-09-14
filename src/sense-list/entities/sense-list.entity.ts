@@ -18,6 +18,9 @@ export class SenseList {
   @Column({ type: 'varchar', nullable: false })
   title: string;
 
+  @Column({ type: 'bool', nullable: false, default: true })
+  canDelete: string;
+
   @ManyToMany(() => SenseLine, (senseLine) => senseLine.senseLists, {
     cascade: true,
     nullable: true,

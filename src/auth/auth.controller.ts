@@ -5,14 +5,20 @@ import {
   UseGuards,
   Body,
   UnauthorizedException,
+  ConflictException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoggedInUserDto, LoginDto, TokensDto, UserDataDto } from './dto';
 import { RegisterDataAuthGuard } from './register-data-auth.guard';
+import { SenseList } from 'src/sense-list/entities/sense-list.entity';
+import { SenseListService } from 'src/sense-list/sense-list.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private senseListService: SenseListService,
+  ) { }
 
   @UseGuards(RegisterDataAuthGuard)
   @Post('login')
@@ -45,16 +51,22 @@ export class AuthController {
   @UseGuards(RegisterDataAuthGuard)
   @Post('register')
   async register(@Body() loginDto: LoginDto): Promise<UserDataDto> {
-    const user = await this.authService.validateUser(
-      loginDto.username,
-      loginDto.password,
-    );
+    const { username, password } = loginDto;
+    const user = await this.authService.getUserByName(username);
 
-    if (!user) {
-      const { username, password } = loginDto;
-      return await this.authService.register(username, password);
+    if (user) {
+      throw new ConflictException('User with the provided name already exists');
     }
 
-    return;
+    const newUser = await this.authService.register(username, password);
+    const newList = new SenseList();
+    newList.title = 'Search History';
+    newList.belongsTo = newUser;
+    await this.senseListService.repo.save(newList);
+
+    return {
+      id: newUser.id,
+      username: newUser.username,
+    };
   }
 }

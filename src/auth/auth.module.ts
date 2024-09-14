@@ -7,6 +7,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { UsersModule } from '../users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SenseListModule } from 'src/sense-list/sense-list.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: '60m' },
       }),
     }),
+    SenseListModule,
   ],
   providers: [AuthService, JwtStrategy, LocalStrategy],
   controllers: [AuthController],
