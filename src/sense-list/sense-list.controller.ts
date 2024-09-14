@@ -7,11 +7,12 @@ import {
   InternalServerErrorException,
   Param,
   Post,
+  Put,
 } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { SenseList } from './entities/sense-list.entity';
 import { SenseListService } from './sense-list.service';
-import { CreateSenseListDto } from 'src/auth/dto';
+import { CreateSenseListDto, SenseListDto } from 'src/auth/dto';
 import { UsersService } from 'src/users/users.service';
 import { AddSenseToWordlistsDto } from './dto';
 import { SenseLineService } from 'src/word/sense-line.service';
@@ -22,8 +23,8 @@ import { SenseLineService } from 'src/word/sense-line.service';
   },
   params: {
     id: {
-      field: 'ID', // Make sure this matches the entity field name
-      type: 'uuid', // Ensure this matches the expected type
+      field: 'ID',
+      type: 'uuid',
       primary: true,
     },
   },
@@ -74,6 +75,28 @@ export class SenseListController implements CrudController<SenseList> {
     } catch (error) {
       throw new InternalServerErrorException(
         'An unexpected error occurred while saving user',
+      );
+    }
+  }
+
+  @Put()
+  async updateWordList(@Body() dto: SenseListDto): Promise<SenseList> {
+    const listToUpdate = await this.service.findOne({
+      where: { ID: dto.ID },
+      relations: ['senseLines'],
+    });
+
+    if (!listToUpdate) {
+      throw new BadRequestException();
+    }
+
+    listToUpdate.title = dto.title;
+    try {
+      await this.service.repo.save(listToUpdate);
+      return listToUpdate;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'An unexpected error occurred while updating list',
       );
     }
   }

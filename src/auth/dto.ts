@@ -50,4 +50,14 @@ export class FetchSenseListByUserIdDto {
   userId: string;
 }
 
+export class SenseListDto {
+  @IsString()
+  @IsNotEmpty()
+  ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+}
+
 export class UpdateSenseListDto extends PartialType(CreateSenseListDto) { }
