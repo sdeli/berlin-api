@@ -127,4 +127,37 @@ export class SenseListController implements CrudController<SenseList> {
     const updatedList = await this.service.repo.save(list);
     return updatedList;
   }
+
+  @Post('remove-sense')
+  async removeSenseFromWordlists(
+    @Body() dto: AddSenseToWordlistsDto,
+  ): Promise<SenseList> {
+    const list = await this.service.findOne({
+      where: {
+        ID: dto.listId,
+      },
+      relations: ['senseLines'],
+    });
+    if (!list) {
+      throw new BadRequestException('invalid dto.listId:' + dto.listId);
+    }
+
+    const line = await this.senseLineService.findOne({
+      where: {
+        ID: dto.lineId,
+      },
+    });
+
+    if (!line) {
+      throw new BadRequestException('invalid dto.lineId:' + dto.lineId);
+    }
+    if (!list.senseLines) list.senseLines = [];
+    const filteredLines = await list.senseLines.filter(
+      (sense) => sense.ID !== line.ID,
+    );
+
+    list.senseLines = filteredLines;
+    const updatedList = await this.service.repo.save(list);
+    return updatedList;
+  }
 }
