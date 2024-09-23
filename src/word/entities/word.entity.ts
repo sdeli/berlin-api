@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   OneToMany,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
 } from 'typeorm';
 import { Sense } from './sense.entity';
 import { WordSources } from 'src/libs/types';
@@ -20,10 +20,10 @@ export class Word {
   @PrimaryGeneratedColumn('uuid')
   ID: string;
 
-  @Column('enum', { enum: WordSources })
+  @Column('enum', { enum: WordSources, nullable: true })
   source: WordSources;
 
-  @Column('varchar', { unique: true })
+  @Column('varchar', { unique: true, nullable: true })
   originalUrl: string;
 
   @Column({ type: 'varchar', nullable: false })
@@ -35,7 +35,7 @@ export class Word {
   @OneToMany(() => Sense, (sense) => sense.word, { nullable: true })
   senses: Sense[];
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User, { cascade: true })
   @JoinColumn()
   belongsTo: User;
 

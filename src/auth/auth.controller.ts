@@ -12,12 +12,14 @@ import { LoggedInUserDto, LoginDto, TokensDto, UserDataDto } from './dto';
 import { RegisterDataAuthGuard } from './register-data-auth.guard';
 import { SenseList } from 'src/sense-list/entities/sense-list.entity';
 import { SenseListService } from 'src/sense-list/sense-list.service';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private senseListService: SenseListService,
+    private usersService: UsersService,
   ) { }
 
   @UseGuards(RegisterDataAuthGuard)
@@ -33,6 +35,19 @@ export class AuthController {
       tokens = await this.authService.login(user);
     } else {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const historyList = await this.senseListService.repo.findOne({
+      where: { belongsTo: { id: user.id }, title: 'Search History' },
+      relations: ['senseLines'],
+    });
+    if (!historyList) {
+      const newList = new SenseList();
+      newList.title = 'Search History';
+      newList.belongsTo = await this.usersService.repo.findOne({
+        where: { id: user.id },
+      });
+      await this.senseListService.repo.save(newList);
     }
 
     const loggedInUser: LoggedInUserDto = {

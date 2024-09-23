@@ -7,6 +7,7 @@ import { WordController } from './word/word.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { SenseListModule } from './sense-list/sense-list.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -30,6 +31,8 @@ import { SenseListModule } from './sense-list/sense-list.module';
       logging: ['error'],
     }),
     AuthModule,
+    UsersModule,
+    SenseListModule,
   ],
   controllers: [WordController, AppController],
   providers: [AppService],

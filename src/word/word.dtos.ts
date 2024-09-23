@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsNumber, IsArray } from 'class-validator';
 
-export class GetItemsDto {
+export class WordFilterDto {
   @IsString()
   @IsOptional() // Make the query parameter optional
   readonly text?: string;
@@ -8,6 +8,8 @@ export class GetItemsDto {
   @IsNumber()
   @IsOptional() // Make the query parameter optional
   readonly limit?: number;
+  @IsString()
+  userId: string;
 }
 
 export class PostSenseListDto {

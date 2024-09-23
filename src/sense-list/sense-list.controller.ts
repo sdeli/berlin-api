@@ -184,12 +184,11 @@ export class SenseListController implements CrudController<SenseList> {
     const user = await this.usersService.repo.findOne({
       where: { id: userId },
     });
-
     if (!user) throw new BadRequestException();
 
     const historyList = await this.senseListService.repo.findOne({
-      where: { belongsTo: user, title: 'Search History' },
-      relations: ['senseLines'],
+      where: { belongsTo: { id: user.id }, title: 'Search History' },
+      relations: ['senseLines', 'belongsTo'],
     });
     if (!historyList) throw new BadRequestException();
     const word = await this.wordService.repo.findOne({

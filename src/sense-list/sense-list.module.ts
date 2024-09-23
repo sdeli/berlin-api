@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SenseListController } from './sense-list.controller';
 import { SenseList } from './entities/sense-list.entity';
@@ -11,7 +11,7 @@ import { WordModule } from 'src/word/word.module';
     UsersModule,
     TypeOrmModule.forFeature([SenseList]),
     UsersModule,
-    WordModule,
+    forwardRef(() => WordModule),
   ],
   controllers: [SenseListController],
   providers: [SenseListService],
