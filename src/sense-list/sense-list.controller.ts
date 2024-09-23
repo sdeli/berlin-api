@@ -19,6 +19,8 @@ import { AddSenseToWordlistsDto, AddWordToSearchHistoryDto } from './dto';
 import { SenseLineService } from 'src/word/sense-line.service';
 import { WordService } from 'src/word/word.service';
 import { SenseLine } from 'src/word/entities/sense-line.entity';
+import { waitFor } from 'src/libs/functions';
+import { ConfigService } from '@nestjs/config';
 
 @Crud({
   model: {
@@ -50,10 +52,14 @@ export class SenseListController implements CrudController<SenseList> {
     private senseLineService: SenseLineService,
     private wordService: WordService,
     private senseListService: SenseListService,
+    private configService: ConfigService,
   ) { }
 
   @Post()
   async save(@Body() dto: CreateSenseListDto): Promise<SenseList> {
+    if (this.configService.get<string>('ENV') === 'local') {
+      await waitFor(2000);
+    }
     const duplicateList = await this.service.findOne({
       where: { title: dto.title },
     });
@@ -86,6 +92,9 @@ export class SenseListController implements CrudController<SenseList> {
 
   @Put()
   async updateWordList(@Body() dto: SenseListDto): Promise<SenseList> {
+    if (this.configService.get<string>('ENV') === 'local') {
+      await waitFor(2000);
+    }
     const listToUpdate = await this.service.findOne({
       where: { ID: dto.ID },
       relations: ['senseLines'],
@@ -113,6 +122,9 @@ export class SenseListController implements CrudController<SenseList> {
 
   @Get('by-user')
   async getOnByUserId(@Query('userId') userId: string): Promise<SenseList[]> {
+    if (this.configService.get<string>('ENV') === 'local') {
+      await waitFor(2000);
+    }
     if (!userId) throw new BadRequestException();
 
     const res = await this.service.find({
@@ -128,6 +140,9 @@ export class SenseListController implements CrudController<SenseList> {
   async addSenseToWordlists(
     @Body() dto: AddSenseToWordlistsDto,
   ): Promise<SenseList> {
+    if (this.configService.get<string>('ENV') === 'local') {
+      await waitFor(2000);
+    }
     const list = await this.service.findOne({
       where: {
         ID: dto.listId,
@@ -162,7 +177,9 @@ export class SenseListController implements CrudController<SenseList> {
   async addWordToSearchHistory(
     @Body() dto: AddWordToSearchHistoryDto,
   ): Promise<void> {
-    console.log('addWordToSearchHistory');
+    if (this.configService.get<string>('ENV') === 'local') {
+      await waitFor(2000);
+    }
     const { userId, wordId } = dto;
     const user = await this.usersService.repo.findOne({
       where: { id: userId },
@@ -198,6 +215,9 @@ export class SenseListController implements CrudController<SenseList> {
   async removeSenseFromWordlists(
     @Body() dto: AddSenseToWordlistsDto,
   ): Promise<SenseList> {
+    if (this.configService.get<string>('ENV') === 'local') {
+      await waitFor(2000);
+    }
     const list = await this.service.findOne({
       where: {
         ID: dto.listId,

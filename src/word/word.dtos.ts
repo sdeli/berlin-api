@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNumber } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsArray } from 'class-validator';
 
 export class GetItemsDto {
   @IsString()
@@ -15,4 +15,16 @@ export class PostSenseListDto {
   title: string;
   @IsString()
   userid: string;
+}
+
+export class AddWordDto {
+  @IsString()
+  userId: string;
+  @IsString()
+  germanWord: string;
+  @IsString()
+  englishWord: string;
+  @IsArray()
+  @IsString({ each: true })
+  listIds: string[];
 }
