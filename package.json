@@ -17,7 +17,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:backup": "./scripts/db_backup.sh",
+    "db:import": "pg_restore -U sandor -h localhost -d berlin -v $1",
+    "db:restore": "bash ./scripts/restore_db.sh"
+
   },
   "dependencies": {
     "@nestjs-library/crud": "^0.12.8",

@@ -7,3 +7,6 @@ https://en.langenscheidt.com/german-english/B/
 
 
 https://dict.leo.org/german-english/Auswirkung
+
+# restoring the database
+npm run db:restore -- ./assets/db/[backup-file.sql]
