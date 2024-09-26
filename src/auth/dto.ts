@@ -61,3 +61,8 @@ export class SenseListDto {
 }
 
 export class UpdateSenseListDto extends PartialType(CreateSenseListDto) { }
+
+export enum DefaultListNamesDto {
+  SearchHistory = 'Search History',
+  YourWords = 'Your Words',
+}
