@@ -32,7 +32,10 @@ export class Word {
   @Column({ nullable: false, type: 'jsonb', default: {} })
   meta: WordMeta;
 
-  @OneToMany(() => Sense, (sense) => sense.word, { nullable: true })
+  @OneToMany(() => Sense, (sense) => sense.word, {
+    nullable: true,
+    cascade: true,
+  })
   senses: Sense[];
 
   @ManyToOne(() => User, { cascade: true })

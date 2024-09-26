@@ -18,10 +18,13 @@ export class Sense {
   @Column('jsonb')
   line: LineValue;
 
-  @OneToMany(() => SenseLine, (senseLine) => senseLine.sense)
+  @OneToMany(() => SenseLine, (senseLine) => senseLine.sense, { cascade: true })
   lines: SenseLine[];
 
-  @ManyToOne(() => Word, (word) => word.senses, { nullable: true })
+  @ManyToOne(() => Word, (word) => word.senses, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   word: Word;
 
   @CreateDateColumn()

@@ -23,12 +23,13 @@ export class SenseLine {
   @Column('jsonb')
   target: LineValue;
 
-  @ManyToOne(() => Sense, (sense) => sense.lines)
+  @ManyToOne(() => Sense, (sense) => sense.lines, { onDelete: 'CASCADE' })
   @JoinColumn()
   sense: Sense;
 
   @ManyToMany(() => SenseList, (senseList) => senseList.senseLines, {
     nullable: true,
+    onDelete: 'CASCADE',
   })
   @JoinTable()
   senseLists: SenseList[];

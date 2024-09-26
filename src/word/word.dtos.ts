@@ -30,3 +30,10 @@ export class AddWordDto {
   @IsString({ each: true })
   listIds: string[];
 }
+
+export class deleteWordDto {
+  @IsString()
+  userId: string;
+  @IsString()
+  lineId: string;
+}

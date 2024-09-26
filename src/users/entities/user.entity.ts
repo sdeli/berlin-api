@@ -2,7 +2,6 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToMany,
   CreateDateColumn,
 } from 'typeorm';
 
@@ -16,9 +15,6 @@ export class User {
 
   @Column()
   password: string;
-
-  @OneToMany(() => User, (user) => user.belongsTo)
-  belongsTo: User;
 
   @CreateDateColumn()
   updatedAt: Date;

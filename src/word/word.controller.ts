@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Query,
@@ -9,7 +10,7 @@ import {
 import { Crud, CrudController } from '@nestjs-library/crud';
 import { WordService } from './word.service';
 import { Word } from './entities/word.entity';
-import { AddWordDto, WordFilterDto } from './word.dtos';
+import { AddWordDto, deleteWordDto, WordFilterDto } from './word.dtos';
 import { waitFor } from 'src/libs/functions';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
@@ -45,6 +46,17 @@ export class WordController implements CrudController<Word> {
     word = await this.crudService.find(query, user);
 
     return word;
+  }
+
+  @Delete()
+  async deleteWordByLineAction(@Body() dto: deleteWordDto): Promise<string> {
+    const line = await this.senseLineService.findOne({
+      where: { ID: dto.lineId },
+      relations: ['sense', 'sense.word'],
+    });
+
+    await this.crudService.deleteWord(line.sense.word.ID, dto.userId);
+    return line.sense.word.ID;
   }
 
   @Post()
