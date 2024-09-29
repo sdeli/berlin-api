@@ -58,7 +58,7 @@ export class SenseListController implements CrudController<SenseList> {
   @Post()
   async save(@Body() dto: CreateSenseListDto): Promise<SenseList> {
     if (this.configService.get<string>('ENV') === 'local') {
-      await waitFor(2000);
+      await waitFor(this.configService);
     }
     const duplicateList = await this.service.findOne({
       where: { title: dto.title },
@@ -93,7 +93,7 @@ export class SenseListController implements CrudController<SenseList> {
   @Put()
   async updateWordList(@Body() dto: SenseListDto): Promise<SenseList> {
     if (this.configService.get<string>('ENV') === 'local') {
-      await waitFor(2000);
+      await waitFor(this.configService);
     }
     const listToUpdate = await this.service.findOne({
       where: { ID: dto.ID },
@@ -123,7 +123,7 @@ export class SenseListController implements CrudController<SenseList> {
   @Get('by-user')
   async getOnByUserId(@Query('userId') userId: string): Promise<SenseList[]> {
     if (this.configService.get<string>('ENV') === 'local') {
-      await waitFor(2000);
+      await waitFor(this.configService);
     }
     if (!userId) throw new BadRequestException();
 
@@ -141,7 +141,7 @@ export class SenseListController implements CrudController<SenseList> {
     @Body() dto: AddSenseToWordlistsDto,
   ): Promise<SenseList> {
     if (this.configService.get<string>('ENV') === 'local') {
-      await waitFor(2000);
+      await waitFor(this.configService);
     }
     const list = await this.service.findOne({
       where: {
@@ -178,7 +178,7 @@ export class SenseListController implements CrudController<SenseList> {
     @Body() dto: AddWordToSearchHistoryDto,
   ): Promise<void> {
     if (this.configService.get<string>('ENV') === 'local') {
-      await waitFor(2000);
+      await waitFor(this.configService);
     }
     const { userId, wordId } = dto;
     const user = await this.usersService.repo.findOne({
@@ -215,7 +215,7 @@ export class SenseListController implements CrudController<SenseList> {
     @Body() dto: AddSenseToWordlistsDto,
   ): Promise<SenseList> {
     if (this.configService.get<string>('ENV') === 'local') {
-      await waitFor(2000);
+      await waitFor(this.configService);
     }
     const list = await this.service.findOne({
       where: {

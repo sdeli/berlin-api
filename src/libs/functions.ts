@@ -1,8 +1,11 @@
-export function waitFor(seconds: number) {
+import { ConfigService } from '@nestjs/config';
+
+export function waitFor(configService: ConfigService) {
+  const DEV_WAIT_TIME = configService.get<string>('DEV_WAIT_TIME');
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(true);
-    }, seconds);
+    }, Number(DEV_WAIT_TIME));
   });
 }
 

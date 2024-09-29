@@ -36,7 +36,7 @@ export class WordController implements CrudController<Word> {
   @Get()
   async findAll(@Query() query: WordFilterDto): Promise<Word[]> {
     if (this.configService.get<string>('ENV') === 'local') {
-      await waitFor(2000);
+      await waitFor(this.configService);
     }
     let word: Word[] = [];
     const user = await this.usersService.repo.findOne({
@@ -61,8 +61,10 @@ export class WordController implements CrudController<Word> {
 
   @Post()
   async addNewWord(@Body() dto: AddWordDto) {
+    console.log('dto');
+    console.log(dto);
     if (this.configService.get<string>('ENV') === 'local') {
-      await waitFor(2000);
+      await waitFor(this.configService);
     }
     const { englishWord, germanWord, listIds, userId } = dto;
     const user = await this.usersService.repo.findOne({
@@ -110,8 +112,13 @@ export class WordController implements CrudController<Word> {
         newSenseLine.senseLists = lists;
       }
     }
-
-    newSenseLine.senseLists = [...newSenseLine.senseLists, yourWordsList];
+    console.log('senseLists');
+    console.log(newSenseLine.senseLists);
+    if (newSenseLine.senseLists) {
+      newSenseLine.senseLists = [...newSenseLine.senseLists, yourWordsList];
+    } else {
+      newSenseLine.senseLists = [yourWordsList];
+    }
     await this.senseLineService.repo.save(newSenseLine);
   }
 }
