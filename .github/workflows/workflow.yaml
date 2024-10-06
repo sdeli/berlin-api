@@ -27,8 +27,8 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t registry.digitalocean.com/artifact-store/berlin-api:${{env.IMAGE_TAG}} .
+        docker build -t registry.digitalocean.com/artifact-store/berlin:berlin-api-${{env.IMAGE_TAG}} .
 
     - name: Push to DigitalOcean Container Registry
       run: |
-        docker push registry.digitalocean.com/artifact-store/berlin-api:${{env.IMAGE_TAG}}
+        docker push registry.digitalocean.com/artifact-store/berlin:berlin-api-${{env.IMAGE_TAG}}
