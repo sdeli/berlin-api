@@ -1,7 +1,14 @@
 export enum WordSources {
-  youtube = 'youtube',
-  facebookReels = 'facebookReels',
-  facebookVideos = 'facebookVideos',
-  tiktok = 'tiktok',
-  dailymotion = 'dailymotion',
+  pons = 'pons.com',
+}
+
+export interface LineValue {
+  html: string;
+  text: string;
+}
+
+export enum Envs {
+  prod = 'prod',
+  preprod = 'preprod',
+  local = 'local',
 }
