@@ -8,8 +8,7 @@
 #   local = 'local',
 # }
 #  - DEV_WAIT_TIME: it needs to be set just if ENV is 'local' 
-
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
 WORKDIR /usr/src/app
 
@@ -21,6 +20,18 @@ COPY . .
 
 RUN npm run build
 
+FROM node:18-alpine
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/package*.json ./
+
+RUN npm install --only=production
+
 EXPOSE 3000
 
+ENV ENV=prod
+
 CMD ["node", "dist/main"]
+
