@@ -20,6 +20,7 @@ import { SenseLine } from './entities/sense-line.entity';
 import { SenseLineService } from './sense-line.service';
 import { SenseListService } from 'src/sense-list/sense-list.service';
 import { In } from 'typeorm';
+import { Envs } from 'src/libs/types';
 
 @Crud({ entity: Word })
 @Controller('word')
@@ -35,7 +36,7 @@ export class WordController implements CrudController<Word> {
 
   @Get()
   async findAll(@Query() query: WordFilterDto): Promise<Word[]> {
-    if (this.configService.get<string>('ENV') === 'local') {
+    if (this.configService.get<string>('ENV') === Envs.local) {
       await waitFor(this.configService);
     }
     let word: Word[] = [];
@@ -63,7 +64,7 @@ export class WordController implements CrudController<Word> {
   async addNewWord(@Body() dto: AddWordDto) {
     console.log('dto');
     console.log(dto);
-    if (this.configService.get<string>('ENV') === 'local') {
+    if (this.configService.get<string>('ENV') === Envs.local) {
       await waitFor(this.configService);
     }
     const { englishWord, germanWord, listIds, userId } = dto;
