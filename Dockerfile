@@ -32,6 +32,7 @@ RUN npm install --only=production
 EXPOSE 3000
 
 ENV ENV=prod
+RUN apk add --no-cache postgresql-client
 
 CMD ["node", "dist/main"]
 

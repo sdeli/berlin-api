@@ -1,7 +1,7 @@
 name: Build and push backend to DigitalOcean Container Registry
 
 env:
-  IMAGE_TAG: '0.2'
+  IMAGE_TAG: '0.7'
 
 on:
   push:
